@@ -4,32 +4,44 @@ function main() {
         .duration(1000)
         .style("background-color", "#0f095e");
         
-    const canvas = d3.select("canvas").node();
-    const context = canvas.getContext("2d");
-    const radius = 50;
-    let x = radius;
-    let y = radius;
-    let dx = 1;
-    let dy = 1;
+        const svg = d3.select("svg");
 
-    function animate() {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.beginPath();
-        context.arc(x, y, radius, 0, 2 * Math.PI);
-        context.stroke();
-
-        x += dx;
-        y += dy;
-
-        if (x + radius >= canvas.width || x - radius <= 0) {
-            dx = -dx;
-        }
-        if (y + radius >= canvas.height || y - radius <= 0) {
-            dy = -dy;
-        }
-
-        requestAnimationFrame(animate);
-    }
-
-    animate();
+        const radius = 20;
+        const chainLength = 200;
+        const circleDistance = chainLength / 2;
+  
+        const data = [
+          { id: 1, x: circleDistance, y: 150 },
+          { id: 2, x: circleDistance * 3, y: 150 },
+        ];
+  
+        const simulation = d3.forceSimulation(data)
+          .force("link", d3.forceLink().distance(chainLength))
+          .force("charge", d3.forceManyBody().strength(-100))
+          .force("center", d3.forceCenter(250, 150));
+  
+        const link = svg.selectAll("line")
+          .data([{ source: data[0], target: data[1] }])
+          .join("line")
+          .attr("x1", d => d.source.x)
+          .attr("y1", d => d.source.y)
+          .attr("x2", d => d.target.x)
+          .attr("y2", d => d.target.y);
+  
+        const circle = svg.selectAll("circle")
+          .data(data)
+          .join("circle")
+          .attr("r", radius);
+  
+        simulation.on("tick", () => {
+          circle.attr("cx", d => d.x)
+            .attr("cy", d => d.y);
+  
+          link.attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
+        });
+  
+        simulation.alpha(1).restart();
 }

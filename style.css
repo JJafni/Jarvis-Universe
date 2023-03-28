@@ -4,3 +4,13 @@
     position: relative;
     overflow: hidden;
 }
+svg {
+    border: 1px solid black;
+  }
+  circle {
+    fill: blue;
+  }
+  line {
+    stroke: black;
+    stroke-width: 3px;
+  }
