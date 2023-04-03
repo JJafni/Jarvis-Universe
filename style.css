@@ -8,7 +8,8 @@ svg {
     border: 1px solid black;
   }
   circle {
-    fill: blue;
+    fill: #818180;
+    border: 3px solid #7bb993;
   }
   line {
     stroke: black;
