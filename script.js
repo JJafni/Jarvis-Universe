@@ -11,25 +11,25 @@ function main() {
     const circleDistance = chainLength * 2;
 
     const data = [
-        { id: 1, x: circleDistance, y: 150 },
-        { id: 2, x: circleDistance, y: 150 },
+        { id: 1, x: circleDistance, y: 300 },
+        { id: 2, x: circleDistance, y: 300 },
+        { id: 3, x: circleDistance, y: 300 },
     ];
 
     const simulation = d3.forceSimulation(data)
         .force("link", d3.forceLink().distance(chainLength))
         .force("charge", d3.forceManyBody().strength(-50))
-        .force("center", d3.forceCenter(250, 150))
-       
+        .force("center", d3.forceCenter(600, 350))
+
 
     const link = svg.selectAll("line")
-        .data([{ source: data[0], target: data[1] }])
+        .data([{ source: data[0], target: data[1] }, { source: data[1], target: data[2] }])
         .join("line")
         .attr("x1", d => d.source.x)
         .attr("y1", d => d.source.y)
         .attr("x2", d => d.target.x)
         .attr("y2", d => d.target.y)
         .style("stroke", "white");
-
 
     const circle = svg.selectAll("circle")
         .data(data)
